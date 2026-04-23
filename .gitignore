@@ -1,0 +1,33 @@
+# ROS 2 build artifacts (workspace root)
+build/
+install/
+log/
+
+# ROS 2 build artifacts (nested inside src — e.g. heron_simulator/)
+src/**/build/
+src/**/install/
+src/**/log/
+
+# Python
+__pycache__/
+*.py[cod]
+*.so
+.Python
+
+# IDEs
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+.DS_Store
+
+# Gazebo cache
+.gazebo/
+
+# Logs and temp
+*.log
+*.tmp
+
+# VRX is a large external dependency — clone it separately (see README)
+src/vrx/
