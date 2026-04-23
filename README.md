@@ -35,7 +35,7 @@ mkdir -p ~/heron_ws/src
 cd ~/heron_ws/src
 
 # Clone this repository
-git clone <your-repo-url> .
+git clone https://github.com/RijadAlisic/heron_ros2.git
 
 # Clone VRX (required for water surface model)
 git clone https://github.com/osrf/vrx.git -b jazzy
