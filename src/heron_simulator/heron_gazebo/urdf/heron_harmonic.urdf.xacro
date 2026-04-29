@@ -1,0 +1,177 @@
+<?xml version="1.0"?>
+<robot name="heron" xmlns:xacro="http://www.ros.org/wiki/xacro">
+
+  <xacro:property name="mass" value="38"/>
+  
+  <material name="dark_gray"><color rgba="0.2 0.2 0.2 1.0"/></material>
+  <material name="yellow"><color rgba="0.8 0.8 0.0 1.0"/></material>
+
+  <!-- BASE LINK -->
+  <link name="base_link">
+    <visual>
+      <geometry>
+        <mesh filename="package://heron_description/meshes/heron_base.stl"/>
+      </geometry>
+      <material name="dark_gray"/>
+    </visual>
+    <collision>
+      <origin xyz="0 0 -0.12" rpy="0 0 0"/>
+      <geometry>
+        <box size="1.0 0.6 0.12"/>
+      </geometry>
+    </collision>
+  </link>
+
+  <!-- DUMMY LINK for inertial -->
+  <link name="dummy_link">
+    <inertial>
+      <mass value="${mass}"/>
+      <origin xyz="0 0 -0.13" rpy="0 0 0"/>
+      <inertia ixx="10" ixy="0" ixz="0" iyy="10" iyz="0" izz="10"/>
+    </inertial>
+  </link>
+
+  <joint name="dummy_to_base" type="fixed">
+    <parent link="base_link"/>
+    <child link="dummy_link"/>
+  </joint>
+  
+  <gazebo reference="base_link">
+  <material>Gazebo/DarkGrey</material>
+  </gazebo>
+
+  <!-- PANELS -->
+  <joint name="base_left_joint" type="fixed">
+    <origin xyz="0.0 0.34495 0.04959" rpy="0 0 0"/>
+    <parent link="base_link"/>
+    <child link="left_panel_link"/>
+  </joint>
+  <link name="left_panel_link">
+    <visual>
+      <geometry>
+        <mesh filename="package://heron_description/meshes/left_panel.stl"/>
+      </geometry>
+      <material name="yellow"/>
+    </visual>
+  </link>
+
+  <joint name="base_right_joint" type="fixed">
+    <origin xyz="0.0 -0.34495 0.04959" rpy="0 0 0"/>
+    <parent link="base_link"/>
+    <child link="right_panel_link"/>
+  </joint>
+  <link name="right_panel_link">
+    <visual>
+      <geometry>
+        <mesh filename="package://heron_description/meshes/right_panel.stl"/>
+      </geometry>
+      <material name="yellow"/>
+    </visual>
+  </link>
+
+  <!-- THRUSTERS -->
+  <joint name="right_engine_joint" type="continuous">
+    <origin xyz="-0.53 -0.377654 -0.16" rpy="0 0 0"/>
+    <parent link="base_link"/>
+    <child link="right_engine_link"/>
+    <axis xyz="1 0 0"/>
+  </joint>
+  <link name="right_engine_link">
+    <visual>
+      <geometry>
+        <mesh filename="package://heron_description/meshes/prop.dae"/>
+      </geometry>
+      <material name="dark_gray"/>
+    </visual>
+    <inertial>
+      <mass value="0.5"/>
+      <inertia ixx="0.001" ixy="0" ixz="0" iyy="0.001" iyz="0" izz="0.001"/>
+    </inertial>
+  </link>
+
+  <joint name="left_engine_joint" type="continuous">
+    <origin xyz="-0.53 0.377654 -0.16" rpy="0 0 0"/>
+    <parent link="base_link"/>
+    <child link="left_engine_link"/>
+    <axis xyz="1 0 0"/>
+  </joint>
+  <link name="left_engine_link">
+    <visual>
+      <geometry>
+        <mesh filename="package://heron_description/meshes/prop.dae"/>
+      </geometry>
+      <material name="dark_gray"/>
+    </visual>
+    <inertial>
+      <mass value="0.5"/>
+      <inertia ixx="0.001" ixy="0" ixz="0" iyy="0.001" iyz="0" izz="0.001"/>
+    </inertial>
+  </link>
+  
+  
+  <!-- Hydrodynamic damping - gentle values
+  <gazebo>
+    <plugin filename="gz-sim-hydrodynamics-system"
+            name="gz::sim::systems::Hydrodynamics">
+      <link_name>base_link</link_name>
+      <water_density>1000</water_density>
+      <xDotU>-2</xDotU>
+      <yDotV>-4</yDotV>
+      <zDotW>-5</zDotW>
+      <kDotP>-2</kDotP>
+      <mDotQ>-2</mDotQ>
+      <nDotR>-2</nDotR>
+    </plugin>
+  </gazebo> -->
+
+  <!-- GAZEBO HARMONIC PLUGINS -->
+  <gazebo>
+    <plugin filename="gz-sim-joint-state-publisher-system"
+            name="gz::sim::systems::JointStatePublisher"/>
+  </gazebo>
+
+  <gazebo>
+    <plugin filename="gz-sim-thruster-system"
+            name="gz::sim::systems::Thruster">
+      <namespace>heron</namespace>
+      <joint_name>right_engine_joint</joint_name>
+      <thrust_coefficient>0.004422</thrust_coefficient>
+      <fluid_density>1000</fluid_density>
+      <propeller_diameter>0.2</propeller_diameter>
+      <velocity_control>true</velocity_control>
+    </plugin>
+  </gazebo>
+
+  <gazebo>
+    <plugin filename="gz-sim-thruster-system"
+            name="gz::sim::systems::Thruster">
+      <namespace>heron</namespace>
+      <joint_name>left_engine_joint</joint_name>
+      <thrust_coefficient>0.004422</thrust_coefficient>
+      <fluid_density>1000</fluid_density>
+      <propeller_diameter>0.2</propeller_diameter>
+      <velocity_control>true</velocity_control>
+    </plugin>
+  </gazebo>
+
+  <gazebo>
+    <plugin filename="gz-sim-odometry-publisher-system"
+            name="gz::sim::systems::OdometryPublisher">
+      <odom_frame>odom</odom_frame>
+      <robot_base_frame>base_link</robot_base_frame>
+    </plugin>
+  </gazebo>
+
+  <gazebo reference="base_link">
+    <material>Gazebo/DarkGrey</material>
+  </gazebo>
+  
+  <gazebo reference="left_panel_link">
+    <material>Gazebo/Yellow</material>
+  </gazebo>
+  
+  <gazebo reference="right_panel_link">
+    <material>Gazebo/Yellow</material>
+  </gazebo>
+
+</robot>

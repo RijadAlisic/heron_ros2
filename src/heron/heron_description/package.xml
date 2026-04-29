@@ -1,0 +1,20 @@
+<?xml version="1.0"?>
+<package format="3">
+  <name>heron_description</name>
+  <version>0.4.0</version>
+  <description>URDF description for Heron</description>
+
+  <maintainer email="mpurvis@clearpathrobotics.com">Mike Purvis</maintainer>
+  <author email="yanma@clearpathrobotics.com">Yan Ma</author>
+
+  <license>BSD</license>
+
+  <buildtool_depend>ament_cmake</buildtool_depend>
+
+  <exec_depend>robot_state_publisher</exec_depend>
+  <exec_depend>xacro</exec_depend>
+
+  <export>
+    <build_type>ament_cmake</build_type>
+  </export>
+</package>
