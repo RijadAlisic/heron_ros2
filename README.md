@@ -2,6 +2,8 @@
 
 A working port of the [Clearpath Heron USV](https://github.com/heron/heron) simulator from ROS 1 (Gazebo Classic + UUV Simulator) to **ROS 2 Jazzy** with **Gazebo Harmonic**.
 
+The `heron` and `heron_simulator` packages are vendored directly into this repository (not submodules), so the workspace is fully self-contained and does not depend on any upstream Clearpath repos remaining available.
+
 ## Features
 
 - Realistic water buoyancy physics (Gazebo Harmonic native)
@@ -31,11 +33,8 @@ sudo apt install -y \
 ## Installation
 
 ```bash
-mkdir -p ~/heron_ws/src
+git clone https://github.com/RijadAlisic/heron_ros2.git ~/heron_ws
 cd ~/heron_ws/src
-
-# Clone this repository
-git clone https://github.com/RijadAlisic/heron_ros2.git
 
 # Clone VRX (required for water surface model)
 git clone https://github.com/osrf/vrx.git -b jazzy
@@ -92,11 +91,11 @@ ros2 topic echo /heron/odometry
 
 ```
 src/
-├── heron/
+├── heron/                         # Vendored from Clearpath (ROS 2 port)
 │   ├── heron_control/             # Teleop and navigation config (ROS 1, not yet ported)
 │   ├── heron_description/         # URDF and meshes (converted to ROS 2)
 │   └── heron_msgs/                # Custom messages (converted to ROS 2)
-├── heron_simulator/
+├── heron_simulator/               # Vendored from Clearpath (ROS 2 port)
 │   ├── heron_gazebo/              # Main simulator package
 │   │   ├── launch/
 │   │   │   └── heron_world.launch.py      # Active ROS 2 launch file
@@ -160,7 +159,7 @@ PRs welcome! Priority areas:
 
 ## Credits
 
-- Original Heron: [Clearpath Robotics](https://clearpathrobotics.com)
+- Original Heron packages: [Clearpath Robotics](https://clearpathrobotics.com) (vendored and ported to ROS 2)
 - ROS 2 Port: MIT
 - Water simulation: [VRX Competition](https://github.com/osrf/vrx)
 
@@ -168,4 +167,4 @@ PRs welcome! Priority areas:
 
 BSD (matching original Clearpath Heron packages)
 
-This is an independent ROS 2 port, not affiliated with Clearpath Robotics
+This is an independent ROS 2 port, not affiliated with Clearpath Robotics.
